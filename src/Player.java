@@ -8,7 +8,7 @@ public class Player {
     int x, y;
     double rotation;
     int FOV = 60;
-    int scanLines = 30;
+    int scanLines = 60;
 
     public Player(int x, int y) {
         this.x = x;
@@ -39,21 +39,28 @@ public class Player {
             localRot = Util.SignModulo(localRot, 360);
             graphics2D.setColor(Color.RED);
             Raycast ray = new Raycast(x,y,localRot);
-            Point intersectionPoint = ray.getClosestWallIntersection();
+            WallInfo intersectionWall = ray.getClosestWallIntersection();
 
-            int distY = intersectionPoint.y - y;
-            int distX = intersectionPoint.x - x;
+            int distY = intersectionWall.intersectionPoint.y - y;
+            int distX = intersectionWall.intersectionPoint.x - x;
 
             double distToWall = Math.sqrt(distX * distX + distY * distY);
             //Got this formula from Permadi Tutorial (http://permadi.com/1996/05/ray-casting-tutorial-9/)
             int wallHeight = (int) ((World.WALL_HEIGHT * World.SCALE_FACTOR) / distToWall);
+
+            //Change color based on type and orientation of wall
+            graphics2D.setColor(World.getColorFromWall(intersectionWall));
+
             //Draw from the middle of the screen
-            graphics2D.fillRect(WALL_WIDTH * scanLineIndex, (height / 2) - (wallHeight / 2), WALL_WIDTH * (scanLineIndex + 1), wallHeight);
+            graphics2D.fillRect(WALL_WIDTH * scanLineIndex, (height / 2) - (wallHeight / 2), WALL_WIDTH, wallHeight);
+
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.drawRect(WALL_WIDTH * scanLineIndex, (height / 2) - (wallHeight / 2), WALL_WIDTH, wallHeight);
 
             scanLineIndex++;
 
-            xPoints[scanLineIndex] = intersectionPoint.x;
-            yPoints[scanLineIndex] = intersectionPoint.y;
+            xPoints[scanLineIndex] = intersectionWall.intersectionPoint.x;
+            yPoints[scanLineIndex] = intersectionWall.intersectionPoint.y;
 
         }
 

@@ -18,26 +18,27 @@ public class Raycast {
         this.rotation = rotation;
     }
 
-    public Point getClosestWallIntersection() {
-        Point[] intersections = getFirstXYIntersections();
+    public WallInfo getClosestWallIntersection() {
+        WallInfo[] wallIntersectInfo = getFirstXYIntersections();
         //If either one is not found that it must be the one that was found.
-        if(intersections[0].x == pointNullVal && intersections[0].y == pointNullVal) {
-            return intersections[1];
-        } else if(intersections[1].x == pointNullVal && intersections[1].y == pointNullVal) {
-            return intersections[0];
+        if(wallIntersectInfo[0].intersectionPoint.x == pointNullVal && wallIntersectInfo[0].intersectionPoint.y == pointNullVal) {
+            return wallIntersectInfo[1];
+        } else if(wallIntersectInfo[1].intersectionPoint.x == pointNullVal && wallIntersectInfo[1].intersectionPoint.y == pointNullVal) {
+            return wallIntersectInfo[0];
         }
 
         //Otherwise return the closest point
-        if(findDistToPlayer(intersections[0]) > findDistToPlayer(intersections[1])) {
-            return intersections[1];
+        if(findDistToPlayer(wallIntersectInfo[0].intersectionPoint) > findDistToPlayer(wallIntersectInfo[1].intersectionPoint)) {
+            return wallIntersectInfo[1];
         } else {
-            return intersections[0];
+            return wallIntersectInfo[0];
         }
     }
 
-    private Point[] getFirstXYIntersections() {
-        Point xIntersection = new Point(pointNullVal, pointNullVal);
-        Point yIntersection = new Point(pointNullVal, pointNullVal);
+    private WallInfo[] getFirstXYIntersections() {
+        WallInfo xWallInfo = new WallInfo(new Point(pointNullVal, pointNullVal), 0, WallInfo.Side.HORIZONTAL);
+        WallInfo yWallInfo = new WallInfo(new Point(pointNullVal, pointNullVal), 0, WallInfo.Side.VERTICAL);
+
         //Cos and Sin use Radians, lets convert!
         double rotationInRadians = Math.toRadians(rotation);
         
@@ -72,7 +73,7 @@ public class Raycast {
                 Point blockCoords = getBlock(rotation, xCol, yPoint);
                 if (World.map[blockCoords.y][blockCoords.x] > 0) {
                     //Intersection on Wall block
-                    yIntersection = new Point(xCol, yPoint);
+                    yWallInfo = new WallInfo(new Point(xCol, yPoint), World.map[blockCoords.y][blockCoords.x], WallInfo.Side.VERTICAL);
                     break;
                 }
             }
@@ -85,16 +86,16 @@ public class Raycast {
                 Point blockCoords = getBlock(rotation, xPoint, yRow);
                 if (World.map[blockCoords.y][blockCoords.x] > 0) {
                     //Intersection on Wall block
-                    xIntersection = new Point(xPoint, yRow);
+                    xWallInfo = new WallInfo(new Point(xPoint, yRow), World.map[blockCoords.y][blockCoords.x], WallInfo.Side.HORIZONTAL);
                     break;
                 }
             }
         }
 
-        Point[] points = new Point[2];
-        points[0] = xIntersection;
-        points[1] = yIntersection;
-        return points;
+        WallInfo[] wallInfos = new WallInfo[2];
+        wallInfos[0] = xWallInfo;
+        wallInfos[1] = yWallInfo;
+        return wallInfos;
     }
 
     private Point getBlock(double rotation, int x, int y) {
