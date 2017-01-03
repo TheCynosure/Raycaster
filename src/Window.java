@@ -21,5 +21,14 @@ public class Window {
         jFrame.addKeyListener(canvas);
         jFrame.setIgnoreRepaint(true);
         jFrame.setVisible(true);
+
+        Timer timer = new Timer(17, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvas.repaint();
+            }
+        });
+
+        timer.start();
     }
 }

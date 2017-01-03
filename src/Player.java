@@ -27,13 +27,8 @@ public class Player {
 
     private void drawWalls(Graphics2D graphics2D, int width, int height) {
         int scanLineIndex = 0;
-        int[] xPoints = new int[scanLines + 2];
-        int[] yPoints = new int[scanLines + 2];
 
-        xPoints[0] = x;
-        yPoints[0] = y;
-
-        final int WALL_WIDTH = width / scanLines;
+        final double WALL_WIDTH = width / scanLines;
 
         for(double rotChange = FOV / 2; scanLineIndex <= scanLines; rotChange -= (double)(FOV) / scanLines) {
             double localRot = rotation - rotChange;
@@ -56,17 +51,10 @@ public class Player {
             //Draw from the middle of the screen
 //            graphics2D.fillRect(WALL_WIDTH * scanLineIndex, (height / 2) - (wallHeight / 2), WALL_WIDTH, wallHeight);
 
-            graphics2D.drawImage(World.getSubTexture(intersectionWall, WALL_WIDTH, wallHeight), WALL_WIDTH * scanLineIndex, (height / 2) - (wallHeight / 2), null);
+            graphics2D.drawImage(World.getSubTexture(intersectionWall, WALL_WIDTH, wallHeight), (int) (WALL_WIDTH * scanLineIndex), (height / 2) - (wallHeight / 2), null);
 
             scanLineIndex++;
-
-            xPoints[scanLineIndex] = intersectionWall.intersectionPoint.x;
-            yPoints[scanLineIndex] = intersectionWall.intersectionPoint.y;
-
         }
-
-        graphics2D.setColor(new Color(100, 100, 100, 100));
-        graphics2D.fillPolygon(xPoints, yPoints, scanLineIndex);
     }
 
 }
