@@ -1,22 +1,21 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 /**
  * Created by jack on 12/14/16.
  */
-public class Canvas  extends Panel implements KeyListener {
+public class Canvas  extends Panel implements KeyListener, ComponentListener {
 
     private Player player;
 
     public Canvas() {
         //Put player at the center of the map
         player = new Player(World.map[0].length * World.MAP_TILE_SIZE / 2, World.map.length * World.MAP_TILE_SIZE / 2);
+        this.addComponentListener(this);
     }
 
     @Override
     public void paint(Graphics g) {
-//        super.paint(g);
         g.setColor(Color.GRAY);
         //Draw Map
         for(int row = 0; row < World.map.length; row++) {
@@ -28,6 +27,9 @@ public class Canvas  extends Panel implements KeyListener {
                 }
             }
         }
+        //Drawing ground
+        g.setColor(Color.MAGENTA);
+        g.fillRect(0, getHeight() / 2, getWidth(), getHeight() / 2);
 
         player.draw(g, getWidth(), getHeight());
         g.dispose();
@@ -63,6 +65,26 @@ public class Canvas  extends Panel implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        player.scanLines = getWidth();
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
 
     }
 }

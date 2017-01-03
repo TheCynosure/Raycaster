@@ -14,7 +14,7 @@ public class Window {
 
     public Window() {
         JFrame jFrame = new JFrame("Raycaster");
-        jFrame.setSize(World.map[0].length * World.MAP_TILE_SIZE, World.map.length * World.MAP_TILE_SIZE);
+        jFrame.setSize(600, 600);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Canvas canvas = new Canvas();
         jFrame.add(canvas);
