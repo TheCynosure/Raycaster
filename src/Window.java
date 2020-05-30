@@ -21,6 +21,7 @@ public class Window {
         jFrame.addKeyListener(canvas);
         jFrame.setIgnoreRepaint(true);
         jFrame.setVisible(true);
+        jFrame.addMouseMotionListener(canvas);
 
         Timer timer = new Timer(17, new ActionListener() {
             @Override

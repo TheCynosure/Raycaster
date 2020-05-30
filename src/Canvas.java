@@ -9,10 +9,12 @@ import java.io.IOException;
 /**
  * Created by jack on 12/14/16.
  */
-public class Canvas  extends JPanel implements KeyListener, ComponentListener {
+public class Canvas  extends JPanel implements KeyListener, ComponentListener, MouseMotionListener {
 
     private Player player;
     private Image sky;
+    private int lastMouseEventX;
+    private double rotationXFactor = 10;
 
     public Canvas() {
         //Put player at the center of the map
@@ -69,18 +71,18 @@ public class Canvas  extends JPanel implements KeyListener, ComponentListener {
         }
         player.rotation = Util.SignModulo((int)player.rotation, 360);
 
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if(e.getKeyCode() == KeyEvent.VK_A) {
             player.y += Math.sin(Math.toRadians(Util.SignModulo(player.rotation - 90, 360))) * moveSpeed;
             player.x += Math.cos(Math.toRadians(Util.SignModulo(player.rotation - 90, 360))) * moveSpeed;
-        } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        } else if(e.getKeyCode() == KeyEvent.VK_D) {
             player.y += Math.sin(Math.toRadians(Util.SignModulo(player.rotation + 90, 360))) * moveSpeed;
             player.x += Math.cos(Math.toRadians(Util.SignModulo(player.rotation + 90, 360))) * moveSpeed;
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
+        if(e.getKeyCode() == KeyEvent.VK_W) {
             player.y += Math.sin(Math.toRadians(player.rotation)) * moveSpeed;
             player.x += Math.cos(Math.toRadians(player.rotation)) * moveSpeed;
-        } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+        } else if(e.getKeyCode() == KeyEvent.VK_S) {
             player.y += Math.sin(Math.toRadians(Util.SignModulo(180 + player.rotation, 360))) * moveSpeed;
             player.x += Math.cos(Math.toRadians(Util.SignModulo(player.rotation + 180, 360))) * moveSpeed;
         }
@@ -110,5 +112,28 @@ public class Canvas  extends JPanel implements KeyListener, ComponentListener {
     @Override
     public void componentHidden(ComponentEvent e) {
 
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+        int mouseEventX = mouseEvent.getX();
+        if ((mouseEventX < getWidth() && mouseEventX >= 0)) {
+            // mouseEvent is from inside the screen.
+            // Get the position relative to the center of the screen.
+            mouseEventX -= getWidth() / 2;
+            // Check the difference from last time.
+            int diffX = mouseEventX - lastMouseEventX;
+            System.out.println("Mouse Change: " + diffX);
+            // Normalize and multiply by speed up factor.
+            double rotChangeX = ((double)(diffX) / getWidth()) * rotationXFactor;
+            System.out.println("RotChange: " + rotChangeX);
+            // Increase the rotation by this much.
+            player.rotation += rotChangeX;
+        }
     }
 }
