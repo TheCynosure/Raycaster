@@ -9,4 +9,4 @@ Here is an image of the beautiful world:
 It runs entirely off the Swing API and sometimes throws exceptions for using too much memory. But, it's not worth fixing. If you want
 to try and improve upon it then I wish you the best!
 
-To run simply load up in your favorite Java Idea and hit run on the Window Class (No one uses the Java command line tools anyways :) ).
+To run simply load up in your favorite Java IDE and hit run on the Window Class (No one uses the Java command line tools anyways :) ).
